@@ -54,6 +54,7 @@ COPY docker/nginx/nginx.conf /etc/nginx/sites-available/default
 RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
 # Configure Supervisor
+RUN mkdir -p /var/log/supervisor
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Create startup script
