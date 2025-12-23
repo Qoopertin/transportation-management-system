@@ -29,10 +29,13 @@ php /var/www/artisan config:cache || echo "Warning: config:cache failed"
 php /var/www/artisan route:cache || echo "Warning: route:cache failed"
 php /var/www/artisan view:cache || echo "Warning: view:cache failed"
 
-# Ensure proper permissions
 echo "Setting permissions..."
 chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+
+# Generate Nginx config with Railway's PORT
+echo "Configuring Nginx to listen on port ${PORT:-8080}..."
+envsubst '${PORT}' < /etc/nginx/sites-available/default.template > /etc/nginx/sites-available/default
 
 # Test Nginx configuration
 echo "Testing Nginx configuration..."
@@ -43,5 +46,6 @@ echo "Testing PHP-FPM configuration..."
 php-fpm -t
 
 echo "Starting services via Supervisor..."
+echo "Nginx will listen on port: ${PORT:-8080}"
 # Start supervisor which will manage PHP-FPM and Nginx
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

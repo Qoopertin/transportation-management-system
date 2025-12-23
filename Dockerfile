@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     nginx \
     supervisor \
+    gettext-base \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
@@ -50,7 +51,7 @@ RUN mkdir -p storage/framework/{cache,sessions,views} bootstrap/cache && \
 
 # Configure Nginx
 RUN rm /etc/nginx/sites-enabled/default
-COPY docker/nginx/nginx.conf /etc/nginx/sites-available/default
+COPY docker/nginx/nginx.conf.template /etc/nginx/sites-available/default.template
 RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
 # Configure Supervisor
@@ -63,6 +64,8 @@ RUN chmod +x /usr/local/bin/start.sh
 
 # Ensure proper permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+
+ENV PORT=8080
 
 EXPOSE 8080
 
