@@ -7,6 +7,13 @@ echo "Current directory: $(pwd)"
 echo "User: $(whoami)"
 echo "PHP version: $(php --version | head -n 1)"
 
+# Set SESSION_DRIVER to database if not already set (Railway fix for 419 errors)
+if [ -z "$SESSION_DRIVER" ]; then
+    echo "SESSION_DRIVER not set, defaulting to 'database'"
+    export SESSION_DRIVER=database
+fi
+echo "Session driver: $SESSION_DRIVER"
+
 # Wait for database to be ready
 echo "Waiting for database to be ready..."
 sleep 10
