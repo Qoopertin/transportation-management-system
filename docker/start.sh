@@ -11,10 +11,6 @@ echo "PHP version: $(php --version | head -n 1)"
 echo "Waiting for database to be ready..."
 sleep 10
 
-# Test database connection
-echo "Testing database connection..."
-php /var/www/artisan db:show || echo "Warning: Could not connect to database yet"
-
 # Run migrations
 echo "Running database migrations..."
 php /var/www/artisan migrate --force --no-interaction || {
@@ -22,6 +18,10 @@ php /var/www/artisan migrate --force --no-interaction || {
     php /var/www/artisan --version
     exit 1
 }
+
+# Run database seeder to create demo accounts
+echo "Seeding database with demo accounts..."
+php /var/www/artisan db:seed --force --no-interaction || echo "Warning: Seeder failed or already seeded"
 
 # Clear and cache config
 echo "Optimizing application..."
