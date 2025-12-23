@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
